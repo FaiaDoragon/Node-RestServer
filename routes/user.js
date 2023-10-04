@@ -12,11 +12,11 @@ router.get('/', usuariosGet);
 
 router.post('/', usuariosPost);
 
-router.patch('/', usuariosPut);
+router.put('/:id', usuariosPut);
 
 router.patch('/', usuariosPatch);
 
-router.patch('/', usuariosDelete);
+router.delete('/', usuariosDelete);
 
 
 module.exports = router;
