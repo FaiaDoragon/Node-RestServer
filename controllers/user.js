@@ -6,15 +6,33 @@ const Usuario = require('../models/usuario');
 
 
 // controladores de las peticiones HTTP
-const usuariosGet = (req = request, res = response ) => {
+const usuariosGet = async(req = request, res = response ) => {
 
-    const {q, nombre = 'no name', apikey} = req.query;
+    //const {q, nombre = 'no name', apikey} = req.query;
+    const { limit = 5, desde = 0 } = req.query
+    const query = {estado: true}
+
+    // const usuarios = await Usuario.find(query)
+    //     .skip(Number(desde))
+    //     .limit(Number(limit));
+
+    // const total = await Usuario.countDocuments(query)
+
+    //como vamos a ejecutar 2 promesas independientes entre si las ejecutaremos al mismo tiempo
+    const [ total, usuarios ] = await Promise.all([
+        Usuario.countDocuments(query),
+        Usuario.find(query)
+            .skip(Number(desde))
+            .limit(Number(limit))
+    ])
+
 
     res.json({
         msg: "get api - controlador",
-        q,
-        nombre,
-        apikey
+        total,
+        usuarios
+        // total,
+        // usuarios
     });
 }
 
@@ -68,11 +86,18 @@ const usuariosPatch = (req, res = response ) => {
     });
 }
 
-const usuariosDelete = (req, res = response ) => {
-    res.json({
+const usuariosDelete = async(req, res = response ) => {
 
-        ok: true,
-        msg: "Delete api - controlador"
+    const { id } = req.params;
+
+    //Delete fisicamente
+    //const usuario = await Usuario.findByIdAndDelete( id );
+
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false})
+
+    res.json({
+        msg: "Delete api - controlador",
+        usuario
     });
 }
 
