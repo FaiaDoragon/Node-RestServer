@@ -53,6 +53,7 @@ const usuariosPut = async(req, res = response ) => {
 
     const usuarioDB = await Usuario.findByIdAndUpdate( id, resto )
 
+
     res.json({
         msg: "put api - controlador",
         usuarioDB
