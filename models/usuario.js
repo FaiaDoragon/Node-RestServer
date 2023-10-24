@@ -33,7 +33,8 @@ const usuarioSchema = Schema({
 
 //ocultamos el password, tiene que ser una funcion normal para que funcione
 usuarioSchema.methods.toJSON = function () {
-    const { password, __v, ...usuario } = this.toObject();
+    const { password, __v, _id,...usuario } = this.toObject();
+    usuario.uid = _id;
     return usuario;
 }
 
