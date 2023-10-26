@@ -1,3 +1,4 @@
+const { body } = require('express-validator');
 const { Categoria, Producto } = require('../models');
 const Role = require('../models/role');
 const Usuario = require('../models/usuario');
@@ -38,10 +39,22 @@ const existeProducto = async(id) => {
     };
 };
 
+const coleccionesPermitidas = ( coleccion = '', colecciones = []) => {
+
+    const incluida = colecciones.includes(coleccion);
+    if (!incluida) {
+        throw new Error(`La coleccion ${ coleccion } no es permitida - ${ colecciones}`)
+    }
+
+    return true;
+}
+
+
 module.exports = {
     esRoleValido,
     emailExiste,
     existeUsuarioPorId,
     existeCategoria,
-    existeProducto
+    existeProducto,
+    coleccionesPermitidas
 }
